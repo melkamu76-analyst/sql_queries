@@ -1,0 +1,85 @@
+SELECT * FROM student.studentperformancefactors;
+
+Questions
+1. How many participants are involved the study?
+
+select count(*) from student.studentperformancefactors;
+
+2. What is the maximum and minimum atendance score?
+
+---max attendance score----
+select max(attendance) as max_attendance, min(attendance) as min_attendance 
+       from student.studentperformancefactors; 
+
+
+3. What is access to resource percent distribution?
+
+select 
+       round(100*sum(case when Access_to_Resources ='High' then 1 else 0 end)/count(*),2) as High_perc,
+        round(100*sum(case when Access_to_Resources ='Medium' then 1 else 0 end)/count(*),2) as Medium_perc,
+        round(100*sum(case when Access_to_Resources ='Low' then 1 else 0 end)/count(*),2) as Low_perc 
+        from student.studentperformancefactors;
+
+4. What is the maximum and minimum sleep hours recorded?
+
+select max(sleep_Hours) as max_sleep_hrs, min(sleep_hours) as min_sleep_hr 
+from student.studentperformancefactors;
+
+
+
+5. What is the maximum and minimum previous exam score?
+
+select max(Previous_Scores) as max_prev_score, min(Previous_Scores) as min_prev_score 
+from student.studentperformancefactors;
+
+6. What is internet access percent distribution?
+
+select 
+       round(100*sum(case when Internet_Access ='Yes' then 1 else 0 end)/count(*),2) as Access_yes,
+        round(100*sum(case when Internet_Access ='No' then 1 else 0 end)/count(*),2) as Access_no
+        from student.studentperformancefactors;
+        
+        
+7. What is the largest exam score improvment?
+
+Alter table student.studentperformancefactors add column score_improvment int not null;
+
+Update student.studentperformancefactors
+  set score_improvment = Exam_score - Previous_scores;
+  
+  Select max(score_improvment) from student.studentperformancefactors;
+   
+
+8. How many classes of parental education levels are there?
+
+select distinct Parental_education_level from student.studentperformancefactors;
+
+
+9. What is the average score imprvment for each Parental involvment?
+
+Select Parental_education_level, avg(score_improvment) as best_score
+    from student.studentperformancefactors
+    group by Parental_education_level
+    order by best_score desc;
+    
+        
+10. What is the best score improvment for each access to resource catagory?
+
+select access_to_resources, max(score_improvment) as improv_by_resource
+  from student.studentperformancefactors
+  group by access_to_resources
+  order by improv_by_resource desc;
+  
+  
+  
+11. What is the sleep hour for highst score improvment? 
+12. What is the maximum and minimum current exam score?
+13. List performance factors for each top ten highst scores
+14. What is the average exam score for each parental education level catagory?
+15. What is the average exam score for each parental involvment catagory?
+16. What is the avarage exam score for each motivation level catagory?
+17. What is the average exam score for each peer influence catagory?
+18. What gender has the highst exam score improvment?
+19. What is the average attendance score by geneder?
+20. What is the average exam score for each tutoring sessions?
+21. What is the average exam score for each family income catagory?
