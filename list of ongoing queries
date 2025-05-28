@@ -71,15 +71,101 @@ select access_to_resources, max(score_improvment) as improv_by_resource
   order by improv_by_resource desc;
   
   
-  
+   
 11. What is the sleep hour for highst score improvment? 
+
+select distinct sleep_hours, avg(score_improvment) as sleep_score
+        from student.studentperformancefactors
+        group by sleep_hours
+        order by sleep_score desc;
+        
+11.2. What is average exam score for each sleep hour.
+
+select distinct sleep_hours, round(avg(exam_score),2) as high_sleep_score  
+     from student.studentperformancefactors
+	 group by sleep_hours
+	 order by high_sleep_score desc;
+
 12. What is the maximum and minimum current exam score?
-13. List performance factors for each top ten highst scores
-14. What is the average exam score for each parental education level catagory?
+
+select max(exam_score) as max_score, min(exam_score) as min_score
+       from student.studentperformancefactors; 
+
+13. What is the average attendance for exam score greater than 90.
+
+select exam_score, round(avg(attendance),2) as top10_score_attendance 
+        from 
+               (select * from student.studentperformancefactors
+                where exam_score >'90') as sq
+		group by exam_score
+        order by exam_score desc;
+
+14. What is percent distibution of parental education level catagories for exam score greater that 90?
+
+select 
+       round(100*sum(case when Parental_education_level ='High School' then 1 else 0 end)/count(*),2) as Highschool_top10,
+        round(100*sum(case when Parental_education_level ='College' then 1 else 0 end)/count(*),2) as College_top10,
+        round(100*sum(case when Parental_education_level ='Postgraduate' then 1 else 0 end)/count(*),2) as PostGrad_top10
+        from 
+              (select * from student.studentperformancefactors
+                where exam_score >'90') as sq;               
+
 15. What is the average exam score for each parental involvment catagory?
+
+select Parental_involvement, round(avg(exam_score),2) as parent_score
+     from student.studentperformancefactors
+     group by Parental_involvement
+     order by parent_score desc;
+     
+     
 16. What is the avarage exam score for each motivation level catagory?
+
+select motivation_level, round(avg(exam_score),2) as motivation_score
+     from student.studentperformancefactors
+     group by motivation_level
+     order by motivation_score desc;
+     
+     
+     
 17. What is the average exam score for each peer influence catagory?
+
+select peer_influence, round(avg(exam_score),2) as peer_score
+     from student.studentperformancefactors
+     group by peer_influence
+     order by peer_score desc;
+     
 18. What gender has the highst exam score improvment?
+
+select gender, round(avg(score_improvment),2) as gender_score
+     from student.studentperformancefactors
+     group by gender
+     order by gender_score desc;
+     
+  
 19. What is the average attendance score by geneder?
+
+select gender, round(avg(attendance),2) as gender_att
+     from student.studentperformancefactors
+     group by gender 
+     order by gender_att desc;
+     
+     
 20. What is the average exam score for each tutoring sessions?
-21. What is the average exam score for each family income catagory?
+
+select tutoring_sessions, round(avg(exam_score),2) as tutor_score
+      from student.studentperformancefactors
+      group by tutoring_sessions
+      order by tutor_score desc;
+	
+21. What is the average tutoring session for students who scored more than 90?
+
+select round(avg(tutoring_sessions),2) 
+        from 
+               (select * from student.studentperformancefactors
+                where exam_score >'90') as sq;
+		
+22. What is the average exam score for students who have no tutor session?
+
+select round(avg(exam_score),2) 
+        from student.studentperformancefactors
+		where tutoring_sessions = '0';
